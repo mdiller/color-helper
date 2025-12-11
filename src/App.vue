@@ -18,7 +18,7 @@
 		</div>
 		<div>
 			<div id="color-preview">
-				<div>
+				<div @click="copyColorToClipboard">
 					{{ color.hex }}
 				</div>
 			</div>
@@ -177,6 +177,13 @@ export default {
 		}
 	},
 	methods: {
+		copyColorToClipboard(event) {
+			navigator.clipboard.writeText(this.color.hex);
+			event.target.classList.add('flash');
+			setTimeout(() => {
+				event.target.classList.remove('flash');
+			}, 500);
+		},
 		updateColorProps(force_update = false) {
 			Object.keys(COLOR_PROP_MAP).forEach(prop => {
 				if (force_update || (this.shown_color[prop] != this.color[prop])) {
@@ -497,6 +504,15 @@ input[type="file"]::file-selector-button {
 	background: black;
 	opacity: 50%;
 	white-space: nowrap;
+}
+
+#color-preview > div {
+	cursor: pointer;
+	transition: opacity 0.5s ease;
+}
+
+#color-preview > div.flash {
+	opacity: 80%;
 }
 
 .color-panel > span {
